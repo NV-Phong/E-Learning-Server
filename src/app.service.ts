@@ -7,7 +7,7 @@ export class AppService {
       return "Hi there! I'm Nguyen Van Phong. Wellcome to my NestJS application!";
    }
 
-   async getAPI(): Promise<Me> {
+   async getMe(): Promise<Me> {
       return {
          name: 'Nguyễn Văn Phong',
          age: 25,
