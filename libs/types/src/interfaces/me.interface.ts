@@ -6,6 +6,7 @@ export interface Experience {
 
 export interface Me {
    name: string;
+   motto: string;
    age: number;
    address: string;
    hobbies: string[];

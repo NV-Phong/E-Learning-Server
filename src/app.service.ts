@@ -10,6 +10,7 @@ export class AppService {
    async getMe(): Promise<Me> {
       return {
          name: 'Nguyễn Văn Phong',
+         motto:'I build digital experiences that don\'t just work spark something new.',
          age: 25,
          address: 'Quảng Trị, Việt Nam',
          hobbies: ['Coding', 'Reading', 'Designing'],
