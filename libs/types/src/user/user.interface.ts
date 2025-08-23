@@ -1,3 +1,8 @@
+export enum UserRole {
+   STUDENT = 'student',
+   ADMIN = 'admin',
+   TEACHER = 'teacher',
+}
 export interface User {
    _id: string;
    username: string;
@@ -7,7 +12,7 @@ export interface User {
    displayName: string;
    avatar: string;
    cover: string;
-   role: string;
+   role: UserRole;
    createdAt: Date;
    isDeleted: boolean;
 }

@@ -9,6 +9,7 @@ import { CourseModule } from './course/course.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { AuthModule } from './auth/auth.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
    imports: [
@@ -16,6 +17,9 @@ import { AuthModule } from './auth/auth.module';
          envFilePath: ['.env.development', '.env'],
          isGlobal: true,
       }),
+      MongooseModule.forRoot(
+         process.env.DATABASE || 'mongodb://localhost:27017/e-learning',
+      ),
       UserModule,
       TeacherModule,
       StudentModule,

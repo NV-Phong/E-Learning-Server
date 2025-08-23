@@ -1,4 +1,4 @@
-import { User } from '@app/types';
+import { User, UserRole } from '@app/types';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class UserService {
          displayName: 'Nguyễn Văn Phong',
          avatar: 'https://example.com/avatar.png',
          cover: 'https://example.com/cover.png',
-         role: 'admin',
+         role: UserRole.ADMIN,
          createdAt: new Date('2025-08-23T10:00:00Z'),
          isDeleted: false,
       };
