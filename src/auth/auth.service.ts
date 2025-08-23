@@ -7,11 +7,17 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User, UserDocument } from 'src/user/user.schema';
-import { LoginDTO, LoginResponse, RegisterDTO } from '@app/types';
+import {
+   LoginDTO,
+   LoginResponse,
+   RefreshAccessTokenDTO,
+   RegisterDTO,
+   TokenResponse,
+} from '@app/types';
 
 @Injectable()
 export class AuthService {
@@ -105,5 +111,32 @@ export class AuthService {
          },
          HttpStatus.BAD_REQUEST,
       );
+   }
+
+   async RefreshAccessToken(
+      refreshaccesstokenDTO: RefreshAccessTokenDTO,
+   ): Promise<TokenResponse> {
+      try {
+         const user = await this.userModel
+            .findById(new Types.ObjectId(refreshaccesstokenDTO.IDUser))
+            .exec();
+
+         if (!user) {
+            throw new HttpException(
+               `User with ID ${refreshaccesstokenDTO.IDUser} not found`,
+               HttpStatus.NOT_FOUND,
+            );
+         }
+         return { access_token: this.GenerateAccessToken(user) };
+      } catch (error) {
+         throw new HttpException(
+            {
+               message: 'Invalid token',
+               statusCode: HttpStatus.BAD_REQUEST,
+               error: error.message || error,
+            },
+            HttpStatus.BAD_REQUEST,
+         );
+      }
    }
 }

@@ -37,3 +37,8 @@ export interface LoginResponse {
 export interface TokenResponse {
    access_token: string;
 }
+
+export interface RefreshAccessTokenDTO {
+   IDUser: string;
+   username: string;
+}
