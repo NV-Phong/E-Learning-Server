@@ -6,11 +6,14 @@ import {
    Delete,
    Param,
    Body,
+   UseGuards,
 } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { Transaction } from './transaction.schema';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('transactions')
+@UseGuards(AuthGuard('jwt'))
 export class TransactionController {
    constructor(private readonly transactionService: TransactionService) {}
 

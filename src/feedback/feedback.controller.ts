@@ -6,11 +6,14 @@ import {
    Delete,
    Param,
    Body,
+   UseGuards,
 } from '@nestjs/common';
 import { FeedbackService } from './feedback.service';
 import { Feedback } from './feedback.schema';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('feedbacks')
+@UseGuards(AuthGuard('jwt'))
 export class FeedbackController {
    constructor(private readonly feedbackService: FeedbackService) {}
 

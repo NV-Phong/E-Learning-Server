@@ -6,11 +6,14 @@ import {
    Delete,
    Param,
    Body,
+   UseGuards,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { Course } from './course.schema';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('courses')
+@UseGuards(AuthGuard('jwt'))
 export class CourseController {
    constructor(private readonly courseService: CourseService) {}
 
