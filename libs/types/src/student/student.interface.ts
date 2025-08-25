@@ -1,3 +1,15 @@
+export enum BookingStatus {
+   PENDING = 'pending',
+   CONFIRMED = 'confirmed',
+   CANCELLED = 'cancelled',
+   COMPLETED = 'completed',
+}
+
+export enum BookingType {
+   TRIAL = 'trial',
+   PAID = 'paid',
+}
+
 export interface Student {
    _id: string;
    userID: string;
@@ -6,8 +18,8 @@ export interface Student {
    booking: {
       teacherID: string;
       courseID: string;
-      status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
-      type: 'trial' | 'paid';
+      status: BookingStatus;
+      type: BookingType;
       start: Date;
       end: Date;
    }[];
