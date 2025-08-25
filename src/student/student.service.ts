@@ -1,32 +1,40 @@
-import { Student } from '@app/types';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Student, StudentDocument } from './student.schema';
 
 @Injectable()
 export class StudentService {
-   async getStudents(): Promise<Student> {
-      return {
-         _id: '65a7d8f9c2a7b3d54e8a91a1',
-         userID: '64f1a8b2e0a5b3a12c9f4d88',
-         level: 'Intermediate',
-         goals: ['Improve speaking fluency', 'Prepare for IELTS exam'],
-         booking: [
-            {
-               teacherID: '65a7c9e5b8a5d2f23c1d9e77',
-               courseID: '65a7d9f6a1c4b2d34c9e10b2',
-               status: 'confirmed',
-               type: 'paid',
-               start: new Date('2025-08-25T09:00:00Z'),
-               end: new Date('2025-08-25T10:00:00Z'),
-            },
-            {
-               teacherID: '65a7c9e5b8a5d2f23c1d9e77',
-               courseID: '65a7da01e1c5c4f12b9f3a11',
-               status: 'pending',
-               type: 'trial',
-               start: new Date('2025-08-28T14:00:00Z'),
-               end: new Date('2025-08-28T15:00:00Z'),
-            },
-         ],
-      };
+   constructor(
+      @InjectModel(Student.name) private studentModel: Model<StudentDocument>,
+   ) {}
+
+   async create(data: Partial<Student>): Promise<Student> {
+      return new this.studentModel(data).save();
+   }
+
+   async findAll(): Promise<Student[]> {
+      return this.studentModel.find({ isDeleted: false }).exec();
+   }
+
+   async findOne(id: string): Promise<Student> {
+      const student = await this.studentModel.findById(id).exec();
+      if (!student || student.isDeleted) throw new NotFoundException();
+      return student;
+   }
+
+   async update(id: string, data: Partial<Student>): Promise<Student> {
+      const updated = await this.studentModel.findByIdAndUpdate(id, data, {
+         new: true,
+      });
+      if (!updated) throw new NotFoundException();
+      return updated;
+   }
+
+   async remove(id: string): Promise<void> {
+      const res = await this.studentModel.findByIdAndUpdate(id, {
+         isDeleted: true,
+      });
+      if (!res) throw new NotFoundException();
    }
 }
