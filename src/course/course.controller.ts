@@ -3,10 +3,5 @@ import { CourseService } from './course.service';
 
 @Controller('course')
 export class CourseController {
-  constructor(private readonly courseService: CourseService) {}
-
-  @Get()
-  async getCourses() {
-    return this.courseService.getCourses();
-  }
+   constructor(private readonly courseService: CourseService) {}
 }
