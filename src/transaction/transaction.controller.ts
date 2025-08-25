@@ -4,9 +4,4 @@ import { TransactionService } from './transaction.service';
 @Controller('transaction')
 export class TransactionController {
    constructor(private readonly transactionService: TransactionService) {}
-
-   @Get()
-   async getTransaction() {
-      return this.transactionService.getTransaction();
-   }
 }

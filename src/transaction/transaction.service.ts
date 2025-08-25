@@ -1,17 +1,44 @@
-import { Transaction } from '@app/types';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Transaction, TransactionDocument } from './transaction.schema';
 
 @Injectable()
 export class TransactionService {
-   async getTransaction(): Promise<Transaction> {
-      return {
-         _id: '65a7e2f9b2c9d3f12e8a91b0',
-         courseID: '65a7db92f8b2c4d12e9a77b3',
-         studentID: '65a7d8f9c2a7b3d54e8a91a1',
-         status: 'paid',
-         paymentMethod: 'Credit Card',
-         createdAt: new Date('2025-08-23T09:30:00Z'),
-         isDeleted: false,
-      };
+   constructor(
+      @InjectModel(Transaction.name)
+      private transactionModel: Model<TransactionDocument>,
+   ) {}
+
+   async create(data: Partial<Transaction>): Promise<Transaction> {
+      return new this.transactionModel(data).save();
+   }
+
+   async findAll(): Promise<Transaction[]> {
+      return this.transactionModel
+         .find({ isDeleted: false })
+         .populate('courseID studentID')
+         .exec();
+   }
+
+   async findOne(id: string): Promise<Transaction> {
+      const trx = await this.transactionModel.findById(id).exec();
+      if (!trx || trx.isDeleted) throw new NotFoundException();
+      return trx;
+   }
+
+   async update(id: string, data: Partial<Transaction>): Promise<Transaction> {
+      const updated = await this.transactionModel.findByIdAndUpdate(id, data, {
+         new: true,
+      });
+      if (!updated) throw new NotFoundException();
+      return updated;
+   }
+
+   async remove(id: string): Promise<void> {
+      const res = await this.transactionModel.findByIdAndUpdate(id, {
+         isDeleted: true,
+      });
+      if (!res) throw new NotFoundException();
    }
 }
