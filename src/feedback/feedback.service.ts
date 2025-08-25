@@ -1,18 +1,44 @@
-import { Feedback } from '@app/types';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Feedback, FeedbackDocument } from './feedback.schema';
 
 @Injectable()
 export class FeedbackService {
-   async getFeedback(): Promise<Feedback> {
-      return {
-         _id: '65a7df82e2b9f4d45c8a91f0',
-         teacherID: '65a7c9e5b8a5d2f23c1d9e77',
-         studentID: '65a7d8f9c2a7b3d54e8a91a1',
-         rating: 5,
-         comment: 'Great teacher! Helped me improve my speaking fluency a lot.',
-         createdAt: new Date('2025-08-20T10:00:00Z'),
-         updatedAt: new Date('2025-08-22T15:30:00Z'),
-         isDeleted: false,
-      };
+   constructor(
+      @InjectModel(Feedback.name)
+      private feedbackModel: Model<FeedbackDocument>,
+   ) {}
+
+   async create(data: Partial<Feedback>): Promise<Feedback> {
+      return new this.feedbackModel(data).save();
+   }
+
+   async findAll(): Promise<Feedback[]> {
+      return this.feedbackModel
+         .find({ isDeleted: false })
+         .populate('teacherID studentID')
+         .exec();
+   }
+
+   async findOne(id: string): Promise<Feedback> {
+      const feedback = await this.feedbackModel.findById(id).exec();
+      if (!feedback || feedback.isDeleted) throw new NotFoundException();
+      return feedback;
+   }
+
+   async update(id: string, data: Partial<Feedback>): Promise<Feedback> {
+      const updated = await this.feedbackModel.findByIdAndUpdate(id, data, {
+         new: true,
+      });
+      if (!updated) throw new NotFoundException();
+      return updated;
+   }
+
+   async remove(id: string): Promise<void> {
+      const res = await this.feedbackModel.findByIdAndUpdate(id, {
+         isDeleted: true,
+      });
+      if (!res) throw new NotFoundException();
    }
 }

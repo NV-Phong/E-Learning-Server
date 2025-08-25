@@ -4,9 +4,4 @@ import { StudentService } from './student.service';
 @Controller('student')
 export class StudentController {
    constructor(private readonly studentService: StudentService) {}
-
-   @Get()
-   async getStudents() {
-      return this.studentService.getStudents();
-   }
 }

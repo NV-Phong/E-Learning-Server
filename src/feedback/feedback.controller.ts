@@ -3,10 +3,5 @@ import { FeedbackService } from './feedback.service';
 
 @Controller('feedback')
 export class FeedbackController {
-  constructor(private readonly feedbackService: FeedbackService) {}
-
-  @Get()
-  getFeedback() {
-    return this.feedbackService.getFeedback();
-  }
+   constructor(private readonly feedbackService: FeedbackService) {}
 }
