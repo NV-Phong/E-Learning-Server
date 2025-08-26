@@ -12,7 +12,7 @@ import { TransactionService } from './transaction.service';
 import { Transaction } from './transaction.schema';
 import { AuthGuard } from '@nestjs/passport';
 
-@Controller('transactions')
+@Controller('transaction')
 @UseGuards(AuthGuard('jwt'))
 export class TransactionController {
    constructor(private readonly transactionService: TransactionService) {}

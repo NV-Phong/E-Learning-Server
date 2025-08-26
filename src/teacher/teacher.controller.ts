@@ -12,7 +12,7 @@ import { TeacherService } from './teacher.service';
 import { Teacher } from './teacher.schema';
 import { AuthGuard } from '@nestjs/passport';
 
-@Controller('teachers')
+@Controller('teacher')
 @UseGuards(AuthGuard('jwt'))
 export class TeacherController {
    constructor(private readonly teacherService: TeacherService) {}

@@ -12,7 +12,7 @@ import { FeedbackService } from './feedback.service';
 import { Feedback } from './feedback.schema';
 import { AuthGuard } from '@nestjs/passport';
 
-@Controller('feedbacks')
+@Controller('feedback')
 @UseGuards(AuthGuard('jwt'))
 export class FeedbackController {
    constructor(private readonly feedbackService: FeedbackService) {}
