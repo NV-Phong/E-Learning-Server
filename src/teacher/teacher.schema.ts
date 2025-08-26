@@ -11,6 +11,9 @@ export class Teacher {
    userID: Types.ObjectId;
 
    @Prop()
+   name: string;
+
+   @Prop()
    bio: string;
 
    @Prop()
