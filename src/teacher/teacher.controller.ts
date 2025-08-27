@@ -13,11 +13,11 @@ import { Teacher } from './teacher.schema';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('teacher')
-@UseGuards(AuthGuard('jwt'))
 export class TeacherController {
    constructor(private readonly teacherService: TeacherService) {}
 
    @Post()
+   @UseGuards(AuthGuard('jwt'))
    create(@Body() data: Partial<Teacher>) {
       return this.teacherService.create(data);
    }
@@ -33,11 +33,13 @@ export class TeacherController {
    }
 
    @Put(':id')
+   @UseGuards(AuthGuard('jwt'))
    update(@Param('id') id: string, @Body() data: Partial<Teacher>) {
       return this.teacherService.update(id, data);
    }
 
    @Delete(':id')
+   @UseGuards(AuthGuard('jwt'))
    remove(@Param('id') id: string) {
       return this.teacherService.remove(id);
    }
